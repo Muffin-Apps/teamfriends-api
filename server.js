@@ -174,7 +174,7 @@ server.get("api/users", User.getAll);
 server.post("api/users", User.create);
 
 var port = process.env.PORT || 3000;
-server.listen(process.env.OPENSHIFT_INTERNAL_PORT || port, process.env.OPENSHIFT_INTERNAL_IP, function (err) {
+server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_NODEJS_IP, function (err) {
     if (err)
         console.error(err)
     else
