@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 var sqlite3 = require("sqlite3").verbose();
-var db = new sqlite3.Database('./db/database.sqlite');
+var db = new sqlite3.Database('./database.sqlite');
 
 var sequelize = new Sequelize('database', 'username', 'password', {
   host: 'localhost',
@@ -13,7 +13,7 @@ var sequelize = new Sequelize('database', 'username', 'password', {
   },
 
   // SQLite only
-  storage: './db/database.sqlite'
+  storage: './database.sqlite'
 });
 var User = sequelize.define('user', {
     firstName: {
