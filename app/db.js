@@ -16,17 +16,36 @@ var sequelize = new Sequelize('database', 'username', 'password', {
   storage: './database.sqlite'
 });
 var User = sequelize.define('user', {
+    password : {
+        type : Sequelize.STRING,
+        allowNull : false,
+        validate : {
+            notEmpty: true
+        }
+    },
     firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull : false,
+        validate : {
+            notEmpty: true
+        }
     },
     lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull : false,
+        validate : {
+            notEmpty: true
+        }
     },
     nickName: {
         type: Sequelize.STRING
     },
     email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull : false,
+        validate : {
+            notEmpty: true
+        }
     },
     phone: {
         type: Sequelize.STRING
@@ -36,7 +55,11 @@ var User = sequelize.define('user', {
     },
     role : {
         type : Sequelize.ENUM,
-        values : ['standard', "manager"]
+        values : ['standard', "manager"],
+        allowNull : false,
+        validate : {
+            notEmpty: true
+        }
     },
     position : {
         type : Sequelize.ENUM,
@@ -50,10 +73,11 @@ var User = sequelize.define('user', {
 User.sync({force: true}).then(function () {
   // Table created
   return User.create({
+      password : "d03m10190",
     firstName: 'Jahiel',
     lastName: 'Jeronimo',
     nickName : "Jero navajero",
-    email : "",
+    email : "jero@solyalas.com",
     phone : "",
     address : "",
     role : "standard",
@@ -61,10 +85,11 @@ User.sync({force: true}).then(function () {
   });
 }).then(function(){
     return User.create({
+        password : "d03m10190",
       firstName: 'Alvaro',
       lastName: 'Fernandez',
       nickName : "drums, guitar... PAYANO",
-      email : "",
+      email : "payano@solyalas.com",
       phone : "",
       address : "",
       role : "standard",
