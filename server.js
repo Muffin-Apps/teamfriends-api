@@ -1,11 +1,23 @@
 var restify = require('restify'),
     fs = require('fs'),
     User = require('./app/user'),
-    socketio = require('socket.io')();
+    socketio = require('socket.io')()
+    jwt = require('jwt-simple')
+    config = require('./config');
 
 
-var server = restify.createServer(),
-    io = socketio.listen(server.server);
+var server = restify.createServer();
+
+exports.createToken = function(user) {
+  var payload = {
+    sub: user.id
+  };
+  return jwt.encode(payload, config.TOKEN_SECRET);
+};
+
+exports.getIdToken = function(token){
+  return jwt.decode(token, config.TOKEN_SECRET).sub;
+}
 
 server
     .use(restify.fullResponse())
@@ -22,14 +34,6 @@ server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_N
     }else{
         console.log('App is ready at : ' + port);
     }
-});
-
-var socketNamespace = io.of('io/matching');
-
-socketNamespace.on('connection', function(socket){
-  socket.on('echo', function(msg){
-    socketNamespace.emit('echo', msg);
-  });
 });
 
 if (process.env.environment == 'production'){

@@ -70,10 +70,42 @@ var User = sequelize.define('user', {
   freezeTableName: true // Model tableName will be the same as the model name
 });
 
+var Match = sequelize.define('match', {
+  date:{
+    type : Sequelize.STRING,
+    allowNull : false,
+    validate : {
+        notEmpty: true
+    }
+  }
+}),{
+  freezeTableName: true // Model tableName will be the same as the model name
+});
+
+var MatchingTeam = sequelize.define('matching-team', {
+  team:{
+    type : Sequelize.ENUM,
+    values : ['black', "red"],
+    allowNull : false,
+    validate : {
+        notEmpty: true
+    }
+  },
+  players:{
+    type: Sequelize.STRING
+  }
+}),{
+  freezeTableName: true // Model tableName will be the same as the model name
+});
+//Foreign key to Match
+MatchingTeam.belongsTo(Match);
+
+// Insert data
+
 User.sync({force: true}).then(function () {
   // Table created
   return User.create({
-      password : "d03m10190",
+    password : "d03m10190",
     firstName: 'Jahiel',
     lastName: 'Jeronimo',
     nickName : "Jero navajero",
@@ -85,7 +117,7 @@ User.sync({force: true}).then(function () {
   });
 }).then(function(){
     return User.create({
-        password : "d03m10190",
+      password : "d03m10190",
       firstName: 'Alvaro',
       lastName: 'Fernandez',
       nickName : "drums, guitar... PAYANO",
@@ -97,6 +129,25 @@ User.sync({force: true}).then(function () {
     });
 });
 
+Match.sync({force: true}).then(function () {
+  // Table created
+  return Match.create({
+    date : "25/10/2015"
+  });
+})
 
+MatchingTeam.sync({force: true}).then(function () {
+  // Table created
+  return MatchingTeam.create({
+    team : "black",
+    MatchId: "1"
+  });
+}).then(function(){
+  return MatchingTeam.create({
+    team : "red",
+    MatchId: "1"
+  });
+});
 
 exports.UserModel = User;
+exports.MatchingTeamModel = MatchingTeam;
