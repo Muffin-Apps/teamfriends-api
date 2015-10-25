@@ -32,6 +32,7 @@ server.post("api/users", User.create);
 
 // Assistance
 server.get("api/matches/:matchId/assistance", Match.injectMatchId, Assistance.getAssistance);
+server.put("api/matches/:matchId/assistance/:userId", Match.injectMatchId, Assistance.updateAssistance);
 
 var port = process.env.PORT || 3000;
 server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_NODEJS_IP, function (err) {
