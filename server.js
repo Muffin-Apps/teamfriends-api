@@ -1,8 +1,10 @@
 var restify = require('restify'),
     fs = require('fs'),
     User = require('./app/user'),
-    socketio = require('socket.io')()
-    jwt = require('jwt-simple')
+    Match = require('./app/match'),
+    Assistance = require('./app/assistance'),
+    socketio = require('socket.io')(),
+    jwt = require('jwt-simple'),
     config = require('./config'),
     matching = require('./app/matching.js');
 
@@ -27,6 +29,9 @@ server
 // Article Start
 server.get("api/users", User.getAll);
 server.post("api/users", User.create);
+
+// Assistance
+server.get("api/matches/:matchId/assistance", Match.injectMatchId, Assistance.getAssistance);
 
 var port = process.env.PORT || 3000;
 server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_NODEJS_IP, function (err) {

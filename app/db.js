@@ -72,7 +72,7 @@ var User = sequelize.define('user', {
 
 var Match = sequelize.define('match', {
   date:{
-    type : Sequelize.STRING,
+    type : Sequelize.DATE,
     allowNull : false,
     validate : {
         notEmpty: true
@@ -107,6 +107,22 @@ var MatchingTeam = sequelize.define('matchingTeam', {
 //Foreign key to Match
 MatchingTeam.belongsTo(Match);
 
+var Assistance = sequelize.define('assistance', {
+    status : {
+        type : Sequelize.ENUM,
+        values : ["assisting", "unknown", "notAssisting"],
+        allowNull : false,
+        validate : {
+            notEmpty: true
+        }
+    }
+},{
+  freezeTableName: true // Model tableName will be the same as the model name
+});
+
+User.belongsToMany(Match, {through: Assistance, as : "Assistance"});
+Match.belongsToMany(User, {through: Assistance});
+
 // Insert data
 
 User.sync({force: true}).then(function () {
@@ -139,7 +155,7 @@ User.sync({force: true}).then(function () {
 Match.sync({force: true}).then(function () {
   // Table created
   return Match.create({
-    date : "25/10/2015"
+    date : new Date(2015, 9, 25)
   });
 })
 
@@ -158,5 +174,9 @@ MatchingTeam.sync({force: true}).then(function () {
   });
 });
 
+Assistance.sync({force : true});
+
 exports.UserModel = User;
+exports.MatchModel = Match;
+exports.AssistanceModel = Assistance;
 exports.MatchingTeamModel = MatchingTeam;
