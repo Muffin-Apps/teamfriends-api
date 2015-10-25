@@ -10,6 +10,7 @@ exports.injectMatch = function(req, res, next){
                 order : [['date', 'DESC']]
             }).then(function(match){
                 context.match = match;
+                context.matchId = match.id;
                 next();
             });
         }else{
