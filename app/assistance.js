@@ -31,6 +31,8 @@ exports.getAssistance = function(req, res, next){
 
             status = status || 'unknown';
 
+            delete user.password;
+
             response[status].push(user);
         });
 
