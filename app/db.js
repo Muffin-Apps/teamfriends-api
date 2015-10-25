@@ -78,11 +78,11 @@ var Match = sequelize.define('match', {
         notEmpty: true
     }
   }
-}),{
+},{
   freezeTableName: true // Model tableName will be the same as the model name
 });
 
-var MatchingTeam = sequelize.define('matching-team', {
+var MatchingTeam = sequelize.define('matchingTeam', {
   team:{
     type : Sequelize.ENUM,
     values : ['black', "red"],
@@ -93,8 +93,15 @@ var MatchingTeam = sequelize.define('matching-team', {
   },
   players:{
     type: Sequelize.STRING
+  },
+  captain:{
+    type: Sequelize.INTEGER,
+    allowNull : false,
+    validate : {
+        notEmpty: true
+    }
   }
-}),{
+},{
   freezeTableName: true // Model tableName will be the same as the model name
 });
 //Foreign key to Match
@@ -140,12 +147,14 @@ MatchingTeam.sync({force: true}).then(function () {
   // Table created
   return MatchingTeam.create({
     team : "black",
-    MatchId: "1"
+    matchId: 1,
+    captain: 1,
   });
 }).then(function(){
   return MatchingTeam.create({
     team : "red",
-    MatchId: "1"
+    matchId: 1,
+    captain: 2
   });
 });
 

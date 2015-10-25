@@ -3,7 +3,8 @@ var restify = require('restify'),
     User = require('./app/user'),
     socketio = require('socket.io')()
     jwt = require('jwt-simple')
-    config = require('./config');
+    config = require('./config'),
+    matching = require('./app/matching.js');
 
 
 var server = restify.createServer();
@@ -35,6 +36,8 @@ server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_N
         console.log('App is ready at : ' + port);
     }
 });
+
+matching.initMatching(server, 1, 1, 2, 1);
 
 if (process.env.environment == 'production'){
     process.on('uncaughtException', function (err) {
