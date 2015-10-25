@@ -155,7 +155,7 @@ User.sync({force: true}).then(function () {
 Match.sync({force: true}).then(function () {
   // Table created
   return Match.create({
-    date : new Date(2015, 9, 25)
+    date : new Date(2015, 10, 1)
   });
 })
 

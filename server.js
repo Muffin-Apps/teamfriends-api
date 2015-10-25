@@ -6,8 +6,11 @@ var restify = require('restify'),
     socketio = require('socket.io')(),
     jwt = require('jwt-simple'),
     config = require('./config'),
-    matching = require('./app/matching.js');
+    matching = require('./app/matching.js'),
+    moment = require('moment-timezone');
 
+
+moment.tz.setDefault('Europe/Madrid');
 
 var server = restify.createServer();
 

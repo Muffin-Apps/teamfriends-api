@@ -1,7 +1,8 @@
 var db = require('./db').AssistanceModel,
     UserModel = require('./db').UserModel,
     badRequestError = require('restify').BadRequestError,
-    invalidContentError = require('restify').InvalidContentError;
+    invalidContentError = require('restify').InvalidContentError,
+    moment = require('moment-timezone');
 
 exports.getAssistance = function(req, res, next){
     Promise.all([
@@ -44,7 +45,14 @@ exports.getAssistance = function(req, res, next){
 
 exports.updateAssistance = function(req, res, next){
     if(!req.body || !req.body.status){
-        return next(new invalidContentError(error.message));
+        return next(new invalidContentError("Invalid body"));
+    }
+
+    var listClosedTime = moment(req.context.match.date).subtract(4, "hours"),
+        currentTime = moment();
+
+    if(currentTime.isAfter(listClosedTime)){
+        return next(new badRequestError("The assistance list for this match is closed"));
     }
 
     db.findOne({
