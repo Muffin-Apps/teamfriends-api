@@ -1,29 +1,28 @@
 var matchingModel = require('./db').MatchingTeamModel;
-var storage = require('node-persist');
 var socketio = require('socket.io')();
 var keyStore = 'initIdMatching';
 var keyTimeout = 'timeout';
-var playerSelected;
+var playerSelected,
+    initId;
+var io;
+var socketNamespace;
 
-storage.init({dir:'../../../persist'});
+exports.initialize = function(){
+
+}
 
 exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatching){
-  var io = socketio.listen(server.server);
-  var socketNamespace = io.of('io/matching');
-  storage.setItem(keyStore,initIdMatching);
+  io = socketio.listen(server.server);
+  socketNamespace = io.of('io/matching');
+
+  playerSelected = null;
+  initId = initIdMatching;
 
   socketNamespace.on('connection', function(socket){
-    socketNamespace.emit('info-matching', { idUser: storage.getItem(keyStore), idMatch: idMatch, idPlayer: playerSelected});
+    socketNamespace.emit('info-matching', { idUser: initId, idMatch: idMatch, idPlayer: playerSelected});
 
     socket.on('player-chosen', function(data){
-      console.log("Nuevo mensaje", data);
-      var idItem = storage.getItem(keyStore);
-      var newData = data;
-      if(idItem==data.idUser){
-        var timeoutToChoose = storage.getItem(keyTimeout);
-        if(timeoutToChoose){
-          clearTimeout(timeoutToChoose);
-        }
+      if(initId==data.idUser){
         teams = matchingModel.findAll({
           where: {
             matchId: data.idMatch
@@ -42,8 +41,6 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
               otherCaptain = teams[i].dataValues.captain;
             }
           }
-          console.log("Equipo seleccionado: "+selectedTeam);
-          console.log("Otro capitan : "+otherCaptain);
           matchingModel.update({
             players: selectedTeam.toString(),
           }, {
@@ -52,15 +49,13 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
               captain: data.idUser
             }
           });
-          storage.setItem(keyStore, otherCaptain);
+          initId = otherCaptain;
           playerSelected = data.player;
-          socketNamespace.emit('info-matching', {idMatch: idMatch, idUser: otherCaptain, idPlayer: data.player});
-          // timeoutToChoose = setTimeout(function () {
-          //   socketNamespace.emit('priority-info', {idMatch: idMatch, idUser: otherCaptain});
-          // }, 30000);
-          storage.setItem(keyTimeout,timeoutToChoose);
+          if(data.finalize){
+            socketNamespace.emit('info-matching', {exit: true});
+          }else
+            socketNamespace.emit('info-matching', {idMatch: idMatch, idUser: otherCaptain, idPlayer: data.player});
         });
-
       }
     });
   });

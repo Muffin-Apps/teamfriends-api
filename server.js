@@ -29,6 +29,9 @@ server
     .use(restify.fullResponse())
     .use(restify.bodyParser());
 
+//sockets
+matching.initialize();
+
 // Article Start
 server.get("api/users", User.getAll);
 server.post("api/users", User.create);
