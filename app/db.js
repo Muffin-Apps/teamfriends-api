@@ -85,7 +85,7 @@ var Match = sequelize.define('match', {
 var MatchingTeam = sequelize.define('matchingTeam', {
   team:{
     type : Sequelize.ENUM,
-    values : ['black', "red"],
+    values : ['black', "green"],
     allowNull : false,
     validate : {
         notEmpty: true
@@ -168,7 +168,7 @@ MatchingTeam.sync({force: true}).then(function () {
   });
 }).then(function(){
   return MatchingTeam.create({
-    team : "red",
+    team : "green",
     matchId: 1,
     captain: 2
   });

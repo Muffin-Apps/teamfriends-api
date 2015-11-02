@@ -3,6 +3,7 @@ var storage = require('node-persist');
 var socketio = require('socket.io')();
 var keyStore = 'initIdMatching';
 var keyTimeout = 'timeout';
+var playerSelected;
 
 storage.init({dir:'../../../persist'});
 
@@ -12,8 +13,7 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
   storage.setItem(keyStore,initIdMatching);
 
   socketNamespace.on('connection', function(socket){
-    console.log("Id que selecciona: "+storage.getItem(keyStore));
-    socketNamespace.emit('info-matching', { idUser: storage.getItem(keyStore), idMatch: idMatch});
+    socketNamespace.emit('info-matching', { idUser: storage.getItem(keyStore), idMatch: idMatch, idPlayer: playerSelected});
 
     socket.on('player-chosen', function(data){
       console.log("Nuevo mensaje", data);
@@ -53,6 +53,7 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
             }
           });
           storage.setItem(keyStore, otherCaptain);
+          playerSelected = data.player;
           socketNamespace.emit('info-matching', {idMatch: idMatch, idUser: otherCaptain, idPlayer: data.player});
           // timeoutToChoose = setTimeout(function () {
           //   socketNamespace.emit('priority-info', {idMatch: idMatch, idUser: otherCaptain});
