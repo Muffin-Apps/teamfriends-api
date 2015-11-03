@@ -30,7 +30,7 @@ server
     .use(restify.bodyParser());
 
 //sockets
-matching.initialize();
+matching.initialize(server);
 
 // Article Start
 server.get("api/users", User.getAll);
@@ -39,6 +39,9 @@ server.post("api/users", User.create);
 // Assistance
 server.get("api/matches/:matchId/assistance", Match.injectMatch, Assistance.getAssistance);
 server.put("api/matches/:matchId/assistance/:userId", Match.injectMatch, User.injectUser, Assistance.updateAssistance);
+
+//Matching
+server.get("api/matches/:matchId/teams", Match.injectMatch, matching.getTeams);
 
 var port = process.env.PORT || 3000;
 server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_NODEJS_IP, function (err) {
@@ -49,7 +52,6 @@ server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_N
     }
 });
 
-matching.initMatching(server, 1, 1, 2, 1);
 
 if (process.env.environment == 'production'){
     process.on('uncaughtException', function (err) {

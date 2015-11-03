@@ -1,4 +1,6 @@
+var schedule = require('node-schedule');
 var matchingModel = require('./db').MatchingTeamModel;
+var userModel = require('./db').UserModel;
 var socketio = require('socket.io')();
 var keyStore = 'initIdMatching';
 var keyTimeout = 'timeout';
@@ -7,8 +9,10 @@ var playerSelected,
 var io;
 var socketNamespace;
 
-exports.initialize = function(){
-
+exports.initialize = function(server){
+  schedule.scheduleJob('* 12 * * 7', function(){
+    initMatching(server, 1, 1, 2, 1);
+  });
 }
 
 exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatching){
@@ -58,5 +62,16 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
         });
       }
     });
+  });
+}
+
+exports.getTeams = function (req, res, next) {
+  userModel.findAll({
+    include: [{
+        model: UserModel,
+        where: { id: Sequelize.col('matchingTeam.id'), matchId: req.context.matchId }
+    }]
+  }).then(function(users){
+    res.json(users);
   });
 }

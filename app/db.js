@@ -128,7 +128,7 @@ Match.belongsToMany(User, {through: Assistance});
 User.sync({force: true}).then(function () {
   // Table created
   return User.create({
-    password : "d03m10190",
+    password : "123",
     firstName: 'Jahiel',
     lastName: 'Jeronimo',
     nickName : "Jero navajero",
@@ -140,7 +140,7 @@ User.sync({force: true}).then(function () {
   });
 }).then(function(){
     return User.create({
-      password : "d03m10190",
+      password : "123",
       firstName: 'Alvaro',
       lastName: 'Fernandez',
       nickName : "drums, guitar... PAYANO",
@@ -149,6 +149,66 @@ User.sync({force: true}).then(function () {
       address : "",
       role : "standard",
       position : "md"
+    });
+}).then(function(){
+    return User.create({
+      password : "123",
+      firstName: 'Alberto',
+      lastName: 'Casares',
+      nickName : "Il Pota",
+      email : "pota@solyalas.com",
+      phone : "",
+      address : "",
+      role : "standard",
+      position : "df"
+    });
+}).then(function(){
+    return User.create({
+      password : "123",
+      firstName: 'Ruben',
+      lastName: 'Ruiz',
+      nickName : "ruben",
+      email : "ruben@solyalas.com",
+      phone : "",
+      address : "",
+      role : "standard",
+      position : "gk"
+    });
+}).then(function(){
+    return User.create({
+      password : "123",
+      firstName: 'Antonio',
+      lastName: 'Lozano',
+      nickName : "mercadona",
+      email : "antonio@solyalas.com",
+      phone : "",
+      address : "",
+      role : "standard",
+      position : "gk"
+    });
+}).then(function(){
+    return User.create({
+      password : "123",
+      firstName: 'Paco',
+      lastName: 'Ruiz',
+      nickName : "paco",
+      email : "paco@solyalas.com",
+      phone : "",
+      address : "",
+      role : "standard",
+      position : "at"
+    });
+}).then(function(){
+    return User.create({
+      password : "123",
+      firstName: 'Rafa',
+      lastName: 'Porcel',
+      nickName : "Karim",
+      email : "rafa@solyalas.com",
+      phone : "",
+      address : "",
+      role : "standard",
+      position : "at"
     });
 });
 
