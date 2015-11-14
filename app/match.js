@@ -1,5 +1,6 @@
 var db = require('./db').MatchModel,
-    notFoundError = require('restify').NotFoundError;
+    notFoundError = require('restify').NotFoundError,
+    moment = require('moment');
 
 exports.injectMatch = function(req, res, next){
     var context = req.context;
@@ -27,3 +28,9 @@ exports.injectMatch = function(req, res, next){
         next();
     }
 };
+
+exports.getMatch = function(req, res, next){
+  var match = req.context.match;
+  match.dataValues.date = moment(match.dataValues.date).valueOf();
+  res.json(match)
+}

@@ -1,6 +1,9 @@
-var restify = require('restify'),
-    fs = require('fs'),
-    User = require('./app/user'),
+var restify = require('restify');
+var server = restify.createServer();
+var fs = require('fs');
+var db = require('./app/db');
+    db.initialize("http://localhost:3000");  // TODO server.address must call after listening
+var User = require('./app/user'),
     Match = require('./app/match'),
     Assistance = require('./app/assistance'),
     socketio = require('socket.io')(),
@@ -11,8 +14,6 @@ var restify = require('restify'),
 
 
 moment.tz.setDefault('Europe/Madrid');
-
-var server = restify.createServer();
 
 exports.createToken = function(user) {
   var payload = {
@@ -30,7 +31,7 @@ server
     .use(restify.bodyParser());
 
 //sockets
-matching.initialize(server);
+matching.initMatching(server, 1, 1, 2, 1);
 
 // Article Start
 server.get("api/users", User.getAll);
@@ -41,7 +42,14 @@ server.get("api/matches/:matchId/assistance", Match.injectMatch, Assistance.getA
 server.put("api/matches/:matchId/assistance/:userId", Match.injectMatch, User.injectUser, Assistance.updateAssistance);
 
 //Matching
+server.get("api/matches/:matchId", Match.injectMatch, Match.getMatch);
 server.get("api/matches/:matchId/teams", Match.injectMatch, matching.getTeams);
+
+//assets
+server.get(/.*/, restify.serveStatic({
+  directory: __dirname, // TODO restrict only the public folder
+  default: "photo.png"
+}));
 
 var port = process.env.PORT || 3000;
 server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_NODEJS_IP, function (err) {

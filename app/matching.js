@@ -19,6 +19,8 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
   io = socketio.listen(server.server);
   socketNamespace = io.of('io/matching');
 
+  // io.set( 'origins', '*:*' );
+
   playerSelected = null;
   initId = initIdMatching;
 
