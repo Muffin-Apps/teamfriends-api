@@ -31,7 +31,6 @@ server
     .use(restify.bodyParser());
 
 //sockets
-matching.initMatching(server, 1, 1, 2, 1);
 
 // User
 server.post("api/users/login", User.login);
@@ -45,6 +44,8 @@ server.put("api/matches/:matchId/assistance/:userId", Match.injectMatch, User.in
 //Matching
 server.get("api/matches/:matchId", Match.injectMatch, Match.getMatch);
 server.get("api/matches/:matchId/teams", Match.injectMatch, matching.getTeams);
+
+server.post("api/match", Match.create);
 
 //assets
 server.get(/.*/, restify.serveStatic({

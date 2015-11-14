@@ -9,12 +9,6 @@ var playerSelected,
 var io;
 var socketNamespace;
 
-exports.initialize = function(server){
-  schedule.scheduleJob('* 12 * * 7', function(){
-    initMatching(server, 1, 1, 2, 1);
-  });
-}
-
 exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatching){
   io = socketio.listen(server.server);
   socketNamespace = io.of('io/matching');
@@ -65,6 +59,11 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
       }
     });
   });
+}
+
+exports.closeConnection = function(){
+  if(io)
+    io.server.close();
 }
 
 exports.getTeams = function (req, res, next) {

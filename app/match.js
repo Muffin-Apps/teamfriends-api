@@ -34,3 +34,7 @@ exports.getMatch = function(req, res, next){
   match.dataValues.date = moment(match.dataValues.date).valueOf();
   res.json(match)
 }
+
+exports.create = function(date){
+  return db.create({date: date});
+}
