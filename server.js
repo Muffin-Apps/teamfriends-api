@@ -33,7 +33,8 @@ server
 //sockets
 matching.initMatching(server, 1, 1, 2, 1);
 
-// Article Start
+// User
+server.post("api/users/login", User.login);
 server.get("api/users", User.getAll);
 server.post("api/users", User.create);
 

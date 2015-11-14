@@ -14,6 +14,23 @@ exports.getAll = function(req, res, next){
     });
 };
 
+exports.login = function(req, res, next){
+    var param = req.body;
+    if(param && param.email && param.password){
+      db.findOne({where:{
+        email: param.email,
+        password: param.password
+      }}).then(function(user){
+        if(user)
+          res.json(user);
+        else
+          return next(new notFoundError("User with email " + param.email + " not found"));
+      });
+    }else{
+        return next(new badRequestError(error.message));
+    }
+};
+
 exports.create = function(req, res, next){
     db.create(req.body).then(function(user){
         res.json(user);
