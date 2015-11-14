@@ -67,7 +67,15 @@ exports.initialize = function (server) {
       },
       position : {
           type : Sequelize.ENUM,
-          values : ['gk', "df", "md", "at"]
+          values : ['gk', "df", "md", "at", "ref"]
+      },
+      nCaptain : {
+          type: Sequelize.INTEGER,
+          defaultValue: "0",
+          allowNull : false,
+          validate : {
+              notEmpty: true
+          }
       },
       photo : {
           type: Sequelize.STRING,
@@ -143,8 +151,8 @@ exports.initialize = function (server) {
       password : "123",
       firstName: 'Jahiel',
       lastName: 'Jeronimo',
-      nickName : "Jero navajero",
-      email : "jero@solyalas.com",
+      nickName : "Jero",
+      email : "jerojjr@gmail.com",
       phone : "",
       address : "",
       role : "standard",
@@ -155,7 +163,7 @@ exports.initialize = function (server) {
         password : "123",
         firstName: 'Alvaro',
         lastName: 'Fernandez',
-        nickName : "drums, guitar... PAYANO",
+        nickName : "Payano",
         email : "payano@solyalas.com",
         phone : "",
         address : "",
@@ -178,9 +186,9 @@ exports.initialize = function (server) {
       return User.create({
         password : "123",
         firstName: 'Ruben',
-        lastName: 'Ruiz',
-        nickName : "ruben",
-        email : "ruben@solyalas.com",
+        lastName: 'Gallegos',
+        nickName : "",
+        email : "ruben_450_@hotmail.com",
         phone : "",
         address : "",
         role : "standard",
@@ -191,7 +199,7 @@ exports.initialize = function (server) {
         password : "123",
         firstName: 'Antonio',
         lastName: 'Lozano',
-        nickName : "mercadona",
+        nickName : "",
         email : "antonio@solyalas.com",
         phone : "",
         address : "",
@@ -201,10 +209,10 @@ exports.initialize = function (server) {
   }).then(function(){
       return User.create({
         password : "123",
-        firstName: 'Paco',
+        firstName: 'Francisco',
         lastName: 'Ruiz',
-        nickName : "paco",
-        email : "paco@solyalas.com",
+        nickName : "Paco",
+        email : "paco_ruiz_7@hotmail.com",
         phone : "",
         address : "",
         role : "standard",
@@ -216,11 +224,119 @@ exports.initialize = function (server) {
         firstName: 'Rafa',
         lastName: 'Porcel',
         nickName : "Karim",
-        email : "rafa@solyalas.com",
+        email : "rporcel@lanjatrans.com",
         phone : "",
         address : "",
         role : "standard",
         position : "at"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'Francisco',
+        lastName: 'Ruiz',
+        nickName : "Paquillo",
+        email : "paquillo.94@hotmail.com",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "at"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'Antonio',
+        lastName: 'Ledesma',
+        nickName : "Bolas",
+        email : "ledesma.rubio@hotmail.com",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "ref"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'Raul',
+        lastName: 'Muñoz',
+        nickName : "",
+        email : "raulete937@hotmail.com",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "md"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'David',
+        lastName: 'Calvo',
+        nickName : "",
+        email : "adcalvo92@gmail.com",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "md"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'Pablo',
+        lastName: 'Muñoz',
+        nickName : "",
+        email : "pablo.71098@gmail.com",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "df"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'Ignacio Javier',
+        lastName: 'Alcalá',
+        nickName : "",
+        email : "naivelna@hotmail.com",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "df"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'Manuel',
+        lastName: 'Esteban',
+        nickName : "Cuco",
+        email : "5828@icagr.es",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "md"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'Alfredo',
+        lastName: 'Molina',
+        nickName : "",
+        email : "alfredmol@hotmail.com",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "at"
+      });
+  }).then(function(){
+      return User.create({
+        password : "123",
+        firstName: 'Jose Ignacio',
+        lastName: 'Rabaza',
+        nickName : "",
+        email : "ignacio.rab@gmail.com",
+        phone : "",
+        address : "",
+        role : "standard",
+        position : "md"
       });
   });
 
