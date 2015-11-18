@@ -1,35 +1,62 @@
 var schedule = require('node-schedule');
-var Match = require('./app/match');
+var Sequelize = require('sequelize');
+var Match = require('./match');
 var moment = require('moment');
-var Matching = require('./app/matching.js');
+var Matching = require('./matching.js');
 var AssistanceModel = require('./db').AssistanceModel;
 var UserModel = require('./db').UserModel;
+var MatchingTeamModel = require('./db').MatchingTeamModel;
+var selectCaptain;
 
-exports.initialize = function(req, res, next){
-  // schedule.scheduleJob('* 12 * * 7', function(){
+exports.initialize = function(server){
+  schedule.scheduleJob('* 12 * * 7', function(){
     Match.create(moment()).then(function(match){
-      // Matching.initMatching(server, match.id, 1, 2, 1);
-      Promise.all([
-          UserModel.findAll({order: [sequelize.fn('min', sequelize.col('nCaptain'))]}),
-          AssistanceModel.findAll({
-              where : {
-                  matchId : req.context.matchId,
-                  status : 1
-              }
-          })
-      ]).then(function(result){
-          var users = result[0] || [],
-              assistance = result[1] || [];
-          var minCaptain = 0;
-          var result = [0, 0];
-              users.forEach(function(user){
-                  assistance.forEach(function(userAssistance){
-                      if(userAssistance.userId === user.id){
-
-                      }
-                  });
-              });
-      });
+      schedule.scheduleJob(new Date(moment().add({days:6, hours:8}).format()), function(param){
+        selectCaptain(param.server, param.matchId);
+      }.bind(null,{server:server, matchId: match.id}));
     });
-  // });
+  });
+}
+
+selectCaptain = function(server, matchId){
+  Promise.all([
+      UserModel.findAll({order: '`nCaptain` ASC'}),
+      AssistanceModel.findAll({
+          where : {
+              matchId : matchId,
+              status : 1
+          }
+      })
+  ]).then(function(result){
+      var users = result[0] || [],
+          assistance = result[1] || [];
+      var minCaptain = 0;
+      var result = [{}, {}];
+      result[0] = users[0];
+      for(var i=1; i<users.length; i++){
+        if(users[i].position===users[0].position){
+          result[1] = users[i];
+          break;
+        }
+      }
+      //if there are no players in that position then we choose the player with the lowest number of any position
+      if(Object.keys(result[1]).length==0){
+        result[1] = users[1];
+      }
+      MatchingTeamModel.create({
+        team : "black",
+        matchId: matchId,
+        captain: result[0].id
+      }).then(function(){
+        MatchingTeamModel.create({
+          team : "green",
+          matchId: matchId,
+          captain: result[1].id
+        }).then(function(){
+          Matching.initMatching(server, matchId, result[0], result[1], result[0]);
+        })
+      })
+  }, function(err){
+    console.log(err)
+  });
 }

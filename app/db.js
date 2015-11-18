@@ -347,21 +347,6 @@ exports.initialize = function (server) {
     });
   })
 
-  MatchingTeam.sync({force: true}).then(function () {
-    // Table created
-    return MatchingTeam.create({
-      team : "black",
-      matchId: 1,
-      captain: 1,
-    });
-  }).then(function(){
-    return MatchingTeam.create({
-      team : "green",
-      matchId: 1,
-      captain: 2
-    });
-  });
-
   Assistance.sync({force : true});
 
   exports.UserModel = User;
