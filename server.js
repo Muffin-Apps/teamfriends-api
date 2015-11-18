@@ -10,7 +10,8 @@ var User = require('./app/user'),
     jwt = require('jwt-simple'),
     config = require('./config'),
     matching = require('./app/matching.js'),
-    moment = require('moment-timezone');
+    moment = require('moment-timezone'),
+    scheduleTask = require('scheduledTasks');
 
 
 moment.tz.setDefault('Europe/Madrid');
@@ -45,7 +46,7 @@ server.put("api/matches/:matchId/assistance/:userId", Match.injectMatch, User.in
 server.get("api/matches/:matchId", Match.injectMatch, Match.getMatch);
 server.get("api/matches/:matchId/teams", Match.injectMatch, matching.getTeams);
 
-server.post("api/match", Match.create);
+server.post("api/match", Match.injectMatch, scheduleTask.initialize);
 
 //assets
 server.get(/.*/, restify.serveStatic({
