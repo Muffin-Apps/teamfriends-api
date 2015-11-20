@@ -1,18 +1,17 @@
 var restify = require('restify');
 var server = restify.createServer();
-var fs = require('fs');
+var fs = require('fs'),
+    socketio = require('socket.io')(),
+    jwt = require('jwt-simple'),
+    moment = require('moment-timezone');
 var db = require('./app/db');
     db.initialize("http://localhost:3000");  // TODO server.address must call after listening
 var User = require('./app/user'),
     Match = require('./app/match'),
     Assistance = require('./app/assistance'),
-    socketio = require('socket.io')(),
-    jwt = require('jwt-simple'),
     config = require('./config'),
     matching = require('./app/matching.js'),
-    moment = require('moment-timezone'),
     scheduledTasks = require('./app/scheduledTasks.js');
-
 
 moment.tz.setDefault('Europe/Madrid');
 
@@ -36,7 +35,7 @@ server
 // User
 server.post("api/users/login", User.login);
 server.get("api/users", User.getAll);
-server.post("api/users", User.create);
+// server.post("api/users", User.create);
 
 // Assistance
 server.get("api/matches/:matchId/assistance", Match.injectMatch, Assistance.getAssistance);
@@ -45,8 +44,9 @@ server.put("api/matches/:matchId/assistance/:userId", Match.injectMatch, User.in
 //Matching
 server.get("api/matches/:matchId", Match.injectMatch, Match.getMatch);
 server.get("api/matches/:matchId/teams", Match.injectMatch, matching.getTeams);
+server.get("api/matches/:matchId/socketIsActive", matching.checkConnection);
 
-// scheduledTasks.initialize(server);
+scheduledTasks.initialize(server);
 
 //assets
 server.get(/.*/, restify.serveStatic({

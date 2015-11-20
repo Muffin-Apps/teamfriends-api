@@ -62,9 +62,17 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
 }
 
 exports.closeConnection = function(){
-  if(io)
+  if(io){
     io.server.close();
+    socketNamespace = undefined;
+  }
 }
+
+exports.checkConnection = function(req, res, next){
+  var response = {status: (socketNamespace!=undefined && socketNamespace!=null)}
+  res.json(response);
+}
+
 
 exports.getTeams = function (req, res, next) {
   userModel.findAll({

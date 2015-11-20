@@ -1,7 +1,7 @@
 var schedule = require('node-schedule');
 var Sequelize = require('sequelize');
 var Match = require('./match');
-var moment = require('moment');
+var moment = require('moment-timezone');
 var Matching = require('./matching.js');
 var AssistanceModel = require('./db').AssistanceModel;
 var UserModel = require('./db').UserModel;
@@ -10,6 +10,9 @@ var selectCaptain;
 
 exports.initialize = function(server){
   schedule.scheduleJob('* 12 * * 7', function(){
+    // Before close last connection
+    Matching.closeConnection();
+    // and create new match and the new task schedule
     Match.create(moment()).then(function(match){
       schedule.scheduleJob(new Date(moment().add({days:6, hours:8}).format()), function(param){
         selectCaptain(param.server, param.matchId);

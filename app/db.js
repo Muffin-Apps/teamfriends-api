@@ -22,6 +22,7 @@ exports.initialize = function (server) {
   var User = sequelize.define('user', {
       password : {
           type : Sequelize.STRING,
+          defaultValue: "3e093daad02b2a65183da5760a511a5dd6ce589f",
           allowNull : false,
           validate : {
               notEmpty: true
@@ -148,7 +149,6 @@ exports.initialize = function (server) {
   User.sync({force: true}).then(function () {
     // Table created
     return User.create({
-      password : "123",
       firstName: 'Jahiel',
       lastName: 'Jeronimo',
       nickName : "Jero",
@@ -160,7 +160,6 @@ exports.initialize = function (server) {
     });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Alvaro',
         lastName: 'Fernandez',
         nickName : "Payano",
@@ -172,7 +171,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Alberto',
         lastName: 'Casares',
         nickName : "Il Pota",
@@ -184,7 +182,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Ruben',
         lastName: 'Gallegos',
         nickName : "",
@@ -196,7 +193,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Antonio',
         lastName: 'Lozano',
         nickName : "",
@@ -208,7 +204,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Francisco',
         lastName: 'Ruiz',
         nickName : "Paco",
@@ -220,7 +215,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Rafa',
         lastName: 'Porcel',
         nickName : "Karim",
@@ -232,7 +226,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Francisco',
         lastName: 'Ruiz',
         nickName : "Paquillo",
@@ -244,7 +237,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Antonio',
         lastName: 'Ledesma',
         nickName : "Bolas",
@@ -256,7 +248,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Raul',
         lastName: 'Muñoz',
         nickName : "",
@@ -268,7 +259,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'David',
         lastName: 'Calvo',
         nickName : "",
@@ -280,7 +270,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Pablo',
         lastName: 'Muñoz',
         nickName : "",
@@ -292,7 +281,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Ignacio Javier',
         lastName: 'Alcalá',
         nickName : "",
@@ -304,7 +292,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Manuel',
         lastName: 'Esteban',
         nickName : "Cuco",
@@ -316,7 +303,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Alfredo',
         lastName: 'Molina',
         nickName : "",
@@ -328,7 +314,6 @@ exports.initialize = function (server) {
       });
   }).then(function(){
       return User.create({
-        password : "123",
         firstName: 'Jose Ignacio',
         lastName: 'Rabaza',
         nickName : "",
@@ -343,7 +328,7 @@ exports.initialize = function (server) {
   Match.sync({force: true}).then(function () {
     // Table created
     return Match.create({
-      date : new Date(2015, 10, 1)
+      date : new Date(2015, 11, 19)
     });
   })
 

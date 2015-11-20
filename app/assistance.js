@@ -70,7 +70,7 @@ exports.updateAssistance = function(req, res, next){
                 status : req.body.status
             }).then(resFn);
         }else{
-            db.create({
+            db.create({ 
                 userId : req.context.userId,
                 matchId : req.context.matchId,
                 status : req.body.status

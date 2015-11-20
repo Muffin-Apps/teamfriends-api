@@ -1,6 +1,6 @@
 var db = require('./db').MatchModel,
     notFoundError = require('restify').NotFoundError,
-    moment = require('moment');
+    moment = require('moment-timezone');
 
 exports.injectMatch = function(req, res, next){
     var context = req.context;

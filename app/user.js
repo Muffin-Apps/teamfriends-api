@@ -17,13 +17,15 @@ exports.getAll = function(req, res, next){
 exports.login = function(req, res, next){
     var param = req.body;
     if(param && param.email && param.password){
+      console.log("Contraseña", param.password)
       db.findOne({where:{
         email: param.email,
         password: param.password
       }}).then(function(user){
-        if(user)
+        if(user){
+          delete user.password;
           res.json(user);
-        else
+        }else
           return next(new notFoundError("User with email " + param.email + " not found"));
       });
     }else{
