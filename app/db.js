@@ -325,12 +325,12 @@ exports.initialize = function (server) {
       });
   });
 
-  Match.sync({force: true}).then(function () {
-    // Table created
-    return Match.create({
-      date : new Date(2015, 11, 19)
-    });
-  })
+  // Match.sync({force: true}).then(function () {
+  //   // Table created
+  //   return Match.create({
+  //     date : new Date(2015, 11, 19)
+  //   });
+  // });
 
   Assistance.sync({force : true});
 

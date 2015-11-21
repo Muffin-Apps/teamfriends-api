@@ -1,4 +1,5 @@
 var schedule = require('node-schedule');
+var Sequelize = require('sequelize');
 var matchingModel = require('./db').MatchingTeamModel;
 var userModel = require('./db').UserModel;
 var socketio = require('socket.io')();
@@ -8,6 +9,13 @@ var playerSelected,
     initId;
 var io;
 var socketNamespace;
+
+var closeConnection = function(){
+  if(io){
+    io.server.close();
+    socketNamespace = null;
+  }
+}
 
 exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatching){
   io = socketio.listen(server.server);
@@ -19,6 +27,7 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
   initId = initIdMatching;
 
   socketNamespace.on('connection', function(socket){
+    console.log("Usuario conectado")
     socketNamespace.emit('info-matching', { idUser: initId, idMatch: idMatch, idPlayer: playerSelected});
 
     socket.on('player-chosen', function(data){
@@ -53,6 +62,7 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
           playerSelected = data.player;
           if(data.finalize){
             socketNamespace.emit('info-matching', {exit: true});
+            closeConnection();
           }else
             socketNamespace.emit('info-matching', {idMatch: idMatch, idUser: otherCaptain, idPlayer: data.player});
         });
@@ -62,10 +72,7 @@ exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatchin
 }
 
 exports.closeConnection = function(){
-  if(io){
-    io.server.close();
-    socketNamespace = undefined;
-  }
+  closeConnection();
 }
 
 exports.checkConnection = function(req, res, next){
@@ -73,11 +80,23 @@ exports.checkConnection = function(req, res, next){
   res.json(response);
 }
 
+exports.getTeams = function(req, res, next){
+  matchingModel.findAll({
+    where:{
+      matchId: req.context.matchId
+    }
+  }).then(function(teams){
+    res.json(teams);
+  }, function(){
+    return next(new notFoundError("Aun no se han creado equipos para este partido"));
+  })
 
-exports.getTeams = function (req, res, next) {
+}
+
+exports.getTeamsPlayers = function (req, res, next) {
   userModel.findAll({
     include: [{
-        model: UserModel,
+        model: userModel,
         where: { id: Sequelize.col('matchingTeam.id'), matchId: req.context.matchId }
     }]
   }).then(function(users){

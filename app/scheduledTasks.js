@@ -9,16 +9,37 @@ var MatchingTeamModel = require('./db').MatchingTeamModel;
 var selectCaptain;
 
 exports.initialize = function(server){
-  schedule.scheduleJob('* 12 * * 7', function(){
+  // schedule.scheduleJob('* 12 * * 7', function(){
+  //   // Before close last connection
+  //   Matching.closeConnection();
+  //   // and create new match and the new task schedule
+  //   Match.create(moment()).then(function(match){
+  //     schedule.scheduleJob(new Date(moment().add({days:6, hours:8}).format()), function(param){
+  //       selectCaptain(param.server, param.matchId);
+  //     }.bind(null,{server:server, matchId: match.id}));
+  //   });
+  // });
+
+  setTimeout(function(){
     // Before close last connection
     Matching.closeConnection();
     // and create new match and the new task schedule
     Match.create(moment()).then(function(match){
-      schedule.scheduleJob(new Date(moment().add({days:6, hours:8}).format()), function(param){
+      setTimeout(function(){
+        AssistanceModel.sync({force : true}).then(function(){
+          for (var i = 1; i <= 16; i++) {
+            AssistanceModel.create(
+              {userId : i, matchId : match.id, status : "assisting"}
+            );
+          }
+        })
+      }, 2000);
+      // schedule.scheduleJob(new Date(moment().add({days:6, hours:8}).format()), function(param){
+      schedule.scheduleJob(new Date(moment().format()), function(param){
         selectCaptain(param.server, param.matchId);
       }.bind(null,{server:server, matchId: match.id}));
     });
-  });
+  }, 5000);
 }
 
 selectCaptain = function(server, matchId){
@@ -56,7 +77,7 @@ selectCaptain = function(server, matchId){
           matchId: matchId,
           captain: result[1].id
         }).then(function(){
-          Matching.initMatching(server, matchId, result[0], result[1], result[0]);
+          Matching.initMatching(server, matchId, result[0].id, result[1].id, result[0].id);
         })
       })
   }, function(err){
