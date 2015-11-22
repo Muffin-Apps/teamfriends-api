@@ -144,6 +144,23 @@ exports.initialize = function (server) {
   User.belongsToMany(Match, {through: Assistance, as : "Assistance"});
   Match.belongsToMany(User, {through: Assistance});
 
+  var Guest = sequelize.define('guest', {
+      name : {
+          type : Sequelize.STRING,
+          allowNull : false,
+          validate : {
+              notEmpty : true
+          }
+      }
+  },{
+    freezeTableName: true // Model tableName will be the same as the model name
+  });
+
+  Guest.belongsTo(Match);
+  Guest.belongsTo(User);
+
+  Guest.sync({force : true});
+
   // Insert data
 
   User.sync({force: true}).then(function () {
@@ -338,4 +355,5 @@ exports.initialize = function (server) {
   exports.MatchModel = Match;
   exports.AssistanceModel = Assistance;
   exports.MatchingTeamModel = MatchingTeam;
+  exports.GuestModel = Guest;
 }
