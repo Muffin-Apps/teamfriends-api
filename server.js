@@ -40,6 +40,8 @@ server.get("api/users", User.getAll);
 // Assistance
 server.get("api/matches/:matchId/assistance", Match.injectMatch, Assistance.getAssistance);
 server.put("api/matches/:matchId/assistance/:userId", Match.injectMatch, User.injectUser, Assistance.updateAssistance);
+server.post("api/matches/:matchId/guests", Match.injectMatch, Assistance.addGuest);
+server.del("api/matches/:matchId/guests/:guestId", Match.injectMatch, Assistance.deleteGuest);
 
 //Matching
 server.get("api/matches/:matchId", Match.injectMatch, Match.getMatch);
