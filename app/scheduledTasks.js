@@ -9,37 +9,39 @@ var MatchingTeamModel = require('./db').MatchingTeamModel;
 var selectCaptain;
 
 exports.initialize = function(server){
-  // schedule.scheduleJob('* 12 * * 7', function(){
-  //   // Before close last connection
-  //   Matching.closeConnection();
-  //   // and create new match and the new task schedule
-  //   Match.create(moment()).then(function(match){
-  //     schedule.scheduleJob(new Date(moment().add({days:6, hours:8}).format()), function(param){
-  //       selectCaptain(param.server, param.matchId);
-  //     }.bind(null,{server:server, matchId: match.id}));
-  //   });
-  // });
-
-  setTimeout(function(){
+  schedule.scheduleJob('* 12 * * 7', function(){
     // Before close last connection
     Matching.closeConnection();
     // and create new match and the new task schedule
     Match.create(moment()).then(function(match){
-      setTimeout(function(){
-        AssistanceModel.sync({force : true}).then(function(){
-          for (var i = 1; i <= 16; i++) {
-            AssistanceModel.create(
-              {userId : i, matchId : match.id, status : "assisting"}
-            );
-          }
-        })
-      }, 2000);
-      // schedule.scheduleJob(new Date(moment().add({days:6, hours:8}).format()), function(param){
-      schedule.scheduleJob(new Date(moment().format()), function(param){
+      schedule.scheduleJob(new Date(moment(match.date).subtract(4, "hours").format())), function(param){
         selectCaptain(param.server, param.matchId);
       }.bind(null,{server:server, matchId: match.id}));
     });
-  }, 5000);
+  });
+
+  // // by test
+  // setTimeout(function(){
+  //   // Before close last connection
+  //   Matching.closeConnection();
+  //   // and create new match and the new task schedule
+  //   Match.create(moment()).then(function(match){
+  //     setTimeout(function(){
+  //       AssistanceModel.sync({force : true}).then(function(){
+  //         for (var i = 1; i <= 16; i++) {
+  //           AssistanceModel.create(
+  //             {userId : i, matchId : match.id, status : "assisting"}
+  //           );
+  //         }
+  //       })
+  //     }, 2000);
+  //     // schedule.scheduleJob(new Date(moment().add({days:6, hours:8}).format()), function(param){
+  //     console.log("Hora de elegir", match.date, new Date(moment(match.date).subtract(4, "hours").format()))
+  //     schedule.scheduleJob(new Date(moment().format()), function(param){
+  //       selectCaptain(param.server, param.matchId);
+  //     }.bind(null,{server:server, matchId: match.id}));
+  //   });
+  // }, 5000);
 }
 
 selectCaptain = function(server, matchId){

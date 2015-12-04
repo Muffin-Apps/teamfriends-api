@@ -44,7 +44,7 @@ server.put("api/matches/:matchId/assistance/:userId", Match.injectMatch, User.in
 //Matching
 server.get("api/matches/:matchId", Match.injectMatch, Match.getMatch);
 server.get("api/matches/:matchId/teams", Match.injectMatch, matching.getTeams);
-server.get("api/matches/:matchId/teams/:teamId", Match.injectMatch, matching.getTeamsPlayers);
+server.get("api/matches/:matchId/teams/players", Match.injectMatch, matching.getTeamsPlayers);
 server.get("api/socket", matching.checkConnection);
 scheduledTasks.initialize(server);
 

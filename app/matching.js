@@ -88,18 +88,48 @@ exports.getTeams = function(req, res, next){
   }).then(function(teams){
     res.json(teams);
   }, function(){
-    return next(new notFoundError("Aun no se han creado equipos para este partido"));
+    return next(new notFoundError("Still they have not been created teams for this match"));
   })
 
 }
 
 exports.getTeamsPlayers = function (req, res, next) {
-  userModel.findAll({
-    include: [{
-        model: userModel,
-        where: { id: Sequelize.col('matchingTeam.id'), matchId: req.context.matchId }
-    }]
-  }).then(function(users){
-    res.json(users);
-  });
+  Promise.all([
+      userModel.findAll(),
+      matchingModel.findAll({
+          where : {
+              matchId : req.context.matchId
+          }
+      })
+  ]).then(function(result){
+    var team1 = [],
+        team2 = [],
+        users = result[0] || [],
+        teams = result[1] || [];
+        if(teams.length==2){
+          teams[0].players = teams[0].players.split(",");
+          teams[1].players = teams[1].players.split(",");
+          teams[0].players.forEach(function(player){
+            users.forEach(function(user){
+              if(user.id === parseInt(player))
+                return team1.push(user);
+            })
+          })
+          teams[1].players.forEach(function(player){
+            users.forEach(function(user){
+              if(user.id === parseInt(player))
+                return team2.push(user);
+            })
+          });
+          teams[0].players = team1;
+          teams[1].players = team2;
+
+          res.json(teams);
+        }else{
+          return next(new internalServerError("There has been an error retrieving equipment"));
+        }
+
+  }, function(){
+    return next(new notFoundError("Still they have not been created teams for this match"));
+  })
 }
