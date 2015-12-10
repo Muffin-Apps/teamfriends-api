@@ -28,6 +28,7 @@
     "moment": "^2.10.6",
     "moment-timezone": "^0.4.1",
     "node-inspector": "^0.12.3",
+    "node-parse-api": "^0.3.8",
     "node-persist": "0.0.7",
     "node-schedule": "^0.3.0",
     "restify": "^4.0.3",

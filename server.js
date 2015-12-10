@@ -11,7 +11,8 @@ var User = require('./app/user'),
     Assistance = require('./app/assistance'),
     config = require('./config'),
     matching = require('./app/matching.js'),
-    scheduledTasks = require('./app/scheduledTasks.js');
+    // scheduledTasks = require('./app/scheduledTasks.js');
+    Notifications = require('./app/notifications.js');
 
 moment.tz.setDefault('Europe/Madrid');
 
@@ -48,7 +49,10 @@ server.get("api/matches/:matchId", Match.injectMatch, Match.getMatch);
 server.get("api/matches/:matchId/teams", Match.injectMatch, matching.getTeams);
 server.get("api/matches/:matchId/teams/players", Match.injectMatch, matching.getTeamsPlayers);
 server.get("api/socket", matching.checkConnection);
-scheduledTasks.initialize(server);
+//scheduledTasks.initialize(server);
+
+// notifications
+server.post('api/notification', Notifications.send);
 
 //assets
 server.get(/.*/, restify.serveStatic({
