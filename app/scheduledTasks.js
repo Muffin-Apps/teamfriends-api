@@ -16,7 +16,7 @@ exports.initialize = function(server){
     Match.create(moment()).then(function(match){
       schedule.scheduleJob(new Date(moment(match.date).subtract(4, "hours").format())), function(param){
         selectCaptain(param.server, param.matchId);
-      }.bind(null,{server:server, matchId: match.id}));
+      }.bind(null,{server:server, matchId: match.id});
     });
   });
 
