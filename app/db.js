@@ -150,6 +150,10 @@ exports.initialize = function (server) {
           validate : {
               notEmpty : true
           }
+      },
+      position : {
+          type : Sequelize.ENUM,
+          values : ['gk', "df", "md", "at", "ref"]
       }
   },{
     freezeTableName: true // Model tableName will be the same as the model name

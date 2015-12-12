@@ -50,7 +50,8 @@ exports.getAssistance = function(req, res, next){
                     response.guests.push({
                         user : user,
                         id : guest.id,
-                        name : guest.name
+                        name : guest.name,
+                        guest : guest.position
                     });
                 }
             });
@@ -99,7 +100,7 @@ exports.updateAssistance = function(req, res, next){
 };
 
 exports.addGuest = function(req, res, next){
-    if(!req.body || !req.body.userId || !req.body.name){
+    if(!req.body || !req.body.userId || !req.body.name || req.body.position){
         return next(new invalidContentError("Invalid body"));
     }
 
@@ -113,6 +114,7 @@ exports.addGuest = function(req, res, next){
     GuestModel.create({
         userId : req.body.userId,
         name : req.body.name,
+        position: req.body.position,
         matchId : req.context.matchId
     }).then(function(createdGuest){
         res.json(createdGuest);

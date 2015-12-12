@@ -12,7 +12,7 @@ var selectCaptain;
 assisting
 */
 exports.initialize = function(server){
-  schedule.scheduleJob('25 16 * * 6', function(){
+  schedule.scheduleJob('53 18 * * 6', function(){
     // Before close last connection
     Matching.closeConnection();
     // and create new match and the new task schedule
