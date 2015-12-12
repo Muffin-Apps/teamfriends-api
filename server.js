@@ -62,6 +62,7 @@ server.listen(process.env.OPENSHIFT_NODEJS_PORT || port, process.env.OPENSHIFT_N
         console.error(err);
     }else{
         console.log('App is ready at : ' + port);
+        console.log(server.address())
     }
 });
 
