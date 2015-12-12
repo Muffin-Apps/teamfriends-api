@@ -160,6 +160,36 @@ exports.initialize = function (server) {
 
   Guest.sync({force : true});
 
+  var oldFindById = Guest.findById,
+      oldFindAll = Guest.findAll,
+      oldCreate = Guest.create;
+
+  Guest.findById = function(id){
+      return oldFindById.apply(Guest, [parseInt(id.replace('gu_', ''))])
+  }
+
+  Guest.findAll = function(options){
+      return oldFindAll.apply(Guest, [options]).then(function(result){
+          if(result){
+              result.forEach(function(guest){
+                  guest.dataValues.id = 'gu_' + guest.dataValues.id
+              })
+          }
+
+          return result;
+      })
+  }
+
+  Guest.create = function(newGuest){
+      return oldCreate.apply(Guest, [newGuest]).then(function(createdGuest){
+          if(createdGuest){
+              createdGuest.dataValues.id = 'gu_' + createdGuest.dataValues.id;
+          }
+
+          return createdGuest;
+      })
+  }
+
   // Insert data
 
   User.sync({force: true}).then(function () {

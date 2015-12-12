@@ -2,6 +2,7 @@ var schedule = require('node-schedule');
 var Sequelize = require('sequelize');
 var matchingModel = require('./db').MatchingTeamModel;
 var userModel = require('./db').UserModel;
+var guestModel = require('./db').GuestModel;
 var socketio = require('socket.io')();
 var keyStore = 'initIdMatching';
 var keyTimeout = 'timeout';
@@ -102,12 +103,18 @@ exports.getTeamsPlayers = function (req, res, next) {
           where : {
               matchId : req.context.matchId
           }
+      }),
+      guestModel.findAll({
+          where : {
+              matchId : req.context.matchId
+          }
       })
   ]).then(function(result){
     var team1 = [],
         team2 = [],
         users = result[0] || [],
-        teams = result[1] || [];
+        teams = result[1] || [],
+        guests = result[2] || [];
         if(teams.length==2){
           teams[0].players = teams[0].players.split(",");
           teams[1].players = teams[1].players.split(",");
@@ -116,11 +123,19 @@ exports.getTeamsPlayers = function (req, res, next) {
               if(user.id === parseInt(player))
                 return team1.push(user);
             })
+            guests.forEach(function(guest){
+              if(guest.id === player)
+                return team1.push(guest);
+            })
           })
           teams[1].players.forEach(function(player){
             users.forEach(function(user){
               if(user.id === parseInt(player))
                 return team2.push(user);
+            })
+            guests.forEach(function(guest){
+              if(guest.id === player)
+                return team2.push(guest);
             })
           });
           teams[0].players = team1;
