@@ -16,6 +16,7 @@ exports.getAll = function(req, res, next){
 
 exports.login = function(req, res, next){
     var param = req.body;
+    console.log(param)
     if(param && param.email && param.password){
       console.log("Contraseña", param.password)
       db.findOne({where:{

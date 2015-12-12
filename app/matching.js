@@ -11,13 +11,15 @@ var io;
 var socketNamespace;
 
 var closeConnection = function(){
-  if(io){
+  console.log("cerrando conexion")
+  if(io && io.server){
     io.server.close();
-    socketNamespace = null;
   }
+  socketNamespace = null;
 }
 
 exports.initMatching = function(server, idMatch, idUserA, idUserB, initIdMatching){
+  console.log(idMatch, idUserA, idUserB, initIdMatching)
   io = socketio.listen(server.server);
   socketNamespace = io.of('io/matching');
 

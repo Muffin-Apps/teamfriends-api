@@ -15,7 +15,6 @@ exports.initialize = function (server) {
       min: 0,
       idle: 10000
     },
-
     // SQLite only
     storage: './database.sqlite'
   });
