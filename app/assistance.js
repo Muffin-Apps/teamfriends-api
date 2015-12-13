@@ -50,8 +50,9 @@ exports.getAssistance = function(req, res, next){
                     response.guests.push({
                         user : user,
                         id : guest.id,
-                        name : guest.name,
-                        guest : guest.position
+                        firstName : guest.firstName,
+                        lastName : guest.lastName,
+                        position : guest.position
                     });
                 }
             });
@@ -113,7 +114,8 @@ exports.addGuest = function(req, res, next){
 
     GuestModel.create({
         userId : req.body.userId,
-        name : req.body.name,
+        firstName : req.body.firstName,
+        lastName : req.body.lastName,
         position: req.body.position,
         matchId : req.context.matchId
     }).then(function(createdGuest){

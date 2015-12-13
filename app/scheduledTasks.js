@@ -6,103 +6,111 @@ var Matching = require('./matching.js');
 var AssistanceModel = require('./db').AssistanceModel;
 var UserModel = require('./db').UserModel;
 var MatchingTeamModel = require('./db').MatchingTeamModel;
+var GuestModel = require('./db').GuestModel;
 var selectCaptain;
 
 /*
 assisting
 */
 exports.initialize = function(server){
-  schedule.scheduleJob('53 18 * * 6', function(){
+  schedule.scheduleJob('40 18 * * 7', function(){
     // Before close last connection
     Matching.closeConnection();
     // and create new match and the new task schedule
 
     Match.create(moment()).then(function(match){
-      AssistanceModel.sync({force : true}).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 3
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 1
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 2
-        });
-      })
-      .then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 5
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 6
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 7
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 8
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 9
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 10
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 11
-        });
-      }).then(function () {
-        // Table created
-        return AssistanceModel.create({
-          status: "assisting",
-          matchId: match.id,
-          userId : 12
-        });
-      }).then(function(){
-        match.date = moment(match.date);
-        schedule.scheduleJob(new Date(moment(match.date).add(1, "minutes").format()), function(param){
-          selectCaptain(param.server, param.matchId);
-        }.bind(null,{server:server, matchId: match.id}));
-      })
-
+      GuestModel.create({
+          userId : 1,
+          firstName : "Ismael",
+          lastName: "Cervantes",
+          position: "df",
+          matchId : match.id
+      }).then(function(createdGuest){
+        AssistanceModel.sync({force : true}).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 3
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 1
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 2
+          });
+        })
+        .then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 5
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 6
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 7
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 8
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 9
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 10
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 11
+          });
+        }).then(function () {
+          // Table created
+          return AssistanceModel.create({
+            status: "assisting",
+            matchId: match.id,
+            userId : 12
+          });
+        }).then(function(){
+          match.date = moment(match.date);
+          schedule.scheduleJob(new Date(moment(match.date).add(1, "minutes").format()), function(param){
+            selectCaptain(param.server, param.matchId);
+          }.bind(null,{server:server, matchId: match.id}));
+        })
+      });
     });
   });
 

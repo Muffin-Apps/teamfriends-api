@@ -144,7 +144,14 @@ exports.initialize = function (server) {
   Match.belongsToMany(User, {through: Assistance});
 
   var Guest = sequelize.define('guest', {
-      name : {
+      firstName : {
+          type : Sequelize.STRING,
+          allowNull : false,
+          validate : {
+              notEmpty : true
+          }
+      },
+      lastName : {
           type : Sequelize.STRING,
           allowNull : false,
           validate : {
