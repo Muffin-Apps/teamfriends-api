@@ -13,11 +13,12 @@ var selectCaptain;
 assisting
 */
 exports.initialize = function(server){
+  console.log("esperando a iniciar tarea....")
   schedule.scheduleJob('40 18 * * 7', function(){
     // Before close last connection
     Matching.closeConnection();
     // and create new match and the new task schedule
-
+    console.log("Tarea ejecutada")
     Match.create(moment()).then(function(match){
       GuestModel.create({
           userId : 1,
