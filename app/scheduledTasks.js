@@ -14,7 +14,7 @@ assisting
 */
 exports.initialize = function(server){
   console.log("esperando a iniciar tarea....")
-  schedule.scheduleJob('01 19 * * 7', function(){
+  schedule.scheduleJob('15 19 * * 7', function(){
     // Before close last connection
     Matching.closeConnection();
     // and create new match and the new task schedule
