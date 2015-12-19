@@ -31,6 +31,7 @@ server
     .use(restify.bodyParser());
 
 //sockets
+console.log("Server time", moment().format())
 
 // User
 server.post("api/users/login", User.login);
