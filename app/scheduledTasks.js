@@ -119,7 +119,7 @@ exports.initializeTask = function(req, res, next){
 }
 exports.initialize = function(server){
   console.log("esperando a iniciar tarea....")
-  schedule.scheduleJob('12 26 * * 6', function(){
+  schedule.scheduleJob('31 20 * * *', function(){
     // Before close last connection
     Matching.closeConnection();
     // and create new match and the new task schedule
