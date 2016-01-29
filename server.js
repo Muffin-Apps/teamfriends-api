@@ -49,7 +49,13 @@ server.get("api/matches/:matchId", Match.injectMatch, Match.getMatch);
 server.get("api/matches/:matchId/teams", Match.injectMatch, matching.getTeams);
 server.get("api/matches/:matchId/teams/players", Match.injectMatch, matching.getTeamsPlayers);
 server.get("api/socket", matching.checkConnection);
-scheduledTasks.initialize(server);
+
+server.post("api/test/task", function(req, res, next){
+  req.server = server;
+  next();
+}, scheduledTasks.initializeTask);
+
+// scheduledTasks.initialize(server);
 
 //assets
 server.get(/.*/, restify.serveStatic({
